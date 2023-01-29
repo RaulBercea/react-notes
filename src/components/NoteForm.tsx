@@ -4,12 +4,15 @@ import Button from "react-bootstrap/esm/Button";
 import { Link } from "react-router-dom";
 import CreatableReactSelect from "react-select/creatable";
 import { NoteData, Tag } from "../App";
+import { v4 as uuidV4 } from "uuid";
 
 type noteFormProps = {
   onSubmit: (data: NoteData) => void;
+  onAddTag: (tag: Tag) => void;
+  availableTags: Tag[];
 };
 
-function NoteForm({ onSubmit }: noteFormProps) {
+function NoteForm({ onSubmit, onAddTag, availableTags }: noteFormProps) {
   const titleRef = useRef<HTMLInputElement>(null);
   const markdownRef = useRef<HTMLTextAreaElement>(null);
   const [selectedTags, setSelectedTags] = useState<Tag[]>([]);
@@ -40,9 +43,17 @@ function NoteForm({ onSubmit }: noteFormProps) {
             <Form.Group controlId="tags">
               <Form.Label>Tags</Form.Label>
               <CreatableReactSelect
+                onCreateOption={(label) => {
+                  const newTag = { id: uuidV4(), label };
+                  onAddTag(newTag);
+                  setSelectedTags((prev) => [...prev, newTag]);
+                }}
                 // Converting the creatable react select tag to
                 // the Value that is stored for the tag type
                 value={selectedTags.map((tag) => {
+                  return { label: tag.label, value: tag.id };
+                })}
+                options={availableTags.map((tag) => {
                   return { label: tag.label, value: tag.id };
                 })}
                 onChange={(tags) => {

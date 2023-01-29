@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { valueContainerCSS } from "react-select/dist/declarations/src/components/containers";
 
 export function useLocalStorage<T>(key: string, initialValue: T | (() => T)) {
+  //   checking if the value exists
   const [value, setValue] = useState<T>(() => {
     const jsonValue = localStorage.getItem(key);
     if (jsonValue == null) {
@@ -15,6 +16,7 @@ export function useLocalStorage<T>(key: string, initialValue: T | (() => T)) {
     }
   });
 
+  //   If the value changes update it
   useEffect(() => {
     localStorage.setItem(key, JSON.stringify(value));
   }, [value, key]);

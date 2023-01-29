@@ -31,6 +31,8 @@ type EditTagsModalProps = {
   show: boolean;
   availableTags: Tag[];
   handleClose: () => void;
+  deleteTag: (id: string) => void;
+  updateTag: (id: string, label: string) => void;
 };
 
 function NoteList({
